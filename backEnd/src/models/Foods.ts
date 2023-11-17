@@ -1,18 +1,22 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../instances/mysql";
-import { Order } from "./Oders";
-import { User } from "./Users";
+import { Ingredients } from "./ingredients";
 
 export interface FoodInstance extends Model{
-    id:number;
+    id:number,
     image:string,
     name:string,
-    category:string,
+    category: string,
     description:string,
-    ingredients:string,
-    price:number
+    price:number,
 
 };
+
+enum FoodCategory {
+    Refeicoes = 'Refeições',
+    Sobremesas = 'Sobremesas',
+    Bebidas = 'Bebidas',
+  }
 
 export const Food = sequelize.define<FoodInstance>('Foods', {
     id:{
@@ -22,22 +26,19 @@ export const Food = sequelize.define<FoodInstance>('Foods', {
         
     },
     image:{
-        type:DataTypes.STRING,
+        type:DataTypes.TEXT,
         allowNull:false
     },
     name:{
         type:DataTypes.STRING,
-        allowNull:false
+        allowNull:false,
+     
     },
     category:{
         type:DataTypes.STRING,
         allowNull:false
     },
     description:{
-        type:DataTypes.STRING,
-        allowNull:false
-    },
-    ingredients:{
         type:DataTypes.STRING,
         allowNull:false
     },
@@ -50,11 +51,10 @@ export const Food = sequelize.define<FoodInstance>('Foods', {
 },{
     timestamps:false
 });
-/*
-(async () => {
-    await sequelize.sync({ force: true });
 
-  })();*/
+Food.hasMany(Ingredients, { foreignKey: {name: 'id_food'} });
+Ingredients.belongsTo(Food, { foreignKey: {name: 'id_food'} });
+
 
 
 

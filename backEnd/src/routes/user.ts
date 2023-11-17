@@ -7,7 +7,7 @@ const userRouter = Router();
 
 userRouter.get('/', userController.All);
 userRouter.post('/register',userController.createUser)
-userRouter.delete('/user/:id', userController.deletUser)
+userRouter.delete('/user/:id', userController.deleteUser)
 userRouter.post('/login', userController.login);
 
 export default userRouter;

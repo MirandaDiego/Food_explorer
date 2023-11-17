@@ -10,7 +10,7 @@ export const All =async (req:Request, res:Response) => {
     
 }
 export const createUser = async (req: Request, res: Response) => {
-    let { name, email, password } = req.body;
+    let { name, email, password, isAdm } = req.body;
 
     if (req.body.name && req.body.email && req.body.password) {
 
@@ -21,14 +21,14 @@ export const createUser = async (req: Request, res: Response) => {
         if (!hashUser) {
 
             const hashedPassword = await bcrypt.hash(password, 10);
-            let newUser = await User.create({ name, email, password:hashedPassword });
+            let newUser = await User.create({ name, email, password:hashedPassword, isAdm });
             res.json({ newUser });
         } else {
             res.json({ error: 'E-mail já existe' });
         }
     } else {
 
-        res.json({ error: 'deu um errinho' });
+        res.json({ error: 'error' });
     }
 }
 export const login = async(req:Request, res:Response) => {
@@ -52,7 +52,8 @@ export const login = async(req:Request, res:Response) => {
             let newUser ={
                 id: user.id,
                 nome: user.name,
-                email: user.email
+                email: user.email,
+                isAdm: user.isAdm
             }
             res.json({status: true, token, user:newUser})
 
@@ -63,7 +64,7 @@ export const login = async(req:Request, res:Response) => {
 
     }
 }
-export const deletUser = async (req:Request, res:Response) => {
+export const deleteUser = async (req:Request, res:Response) => {
     const id = req.params.id
 
     try{
